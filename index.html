@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joke and Quote App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .content {
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 600px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Joke and Quote App</h1>
+    <div class="content">
+        <label for="category">Select a Category:</label>
+        <select id="category">
+            <option value="joke">Joke</option>
+            <!-- <option value="story">Story</option> -->
+            <option value="quote">Quote</option>
+            <!-- <option value="shayari">Shayari</option> -->
+        </select>
+        <br><br>
+        <label for="keyword">Enter a Keyword:</label>
+        <input type="text" id="keyword" placeholder="Keyword">
+        <br><br>
+        <button onclick="generateContent()">Generate</button>
+        <br><br>
+        <div id="output"></div>
+    </div>
+
+    <script>
+        function generateContent() {
+            const category = document.getElementById("category").value;
+            const keyword = document.getElementById("keyword").value;
+
+            fetch(`http://localhost:3000/generate-${category}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ keyword }),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    const output = document.getElementById("output");
+                    output.innerHTML = `<p>${data[category]}</p>`;
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                });
+        }
+    </script>
+</body>
+
+</html>
